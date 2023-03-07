@@ -1,4 +1,4 @@
-import { UserModel, USER_ROLES } from "../types"
+import { UserModel, USER_ROLES, UserDB } from "../types"
 
 export class User {
     constructor (
@@ -62,6 +62,17 @@ export class User {
             password: this.password,
             role: this.role,
             createdAt: this.createdAt
+        }
+    }
+
+    public toDBModel(): UserDB {
+        return {
+            id: this.id,
+            name: this.name,
+            email: this.email,
+            password: this.password,
+            role: this.role,
+            created_at: this.createdAt
         }
     }
 }

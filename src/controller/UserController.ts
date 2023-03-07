@@ -1,5 +1,7 @@
 import { Request, Response } from "express"
 import { UserBusiness } from "../business/UserBusiness"
+import { SignupRequestDTO, SignupResponseDTO } from "../dto/UserDTO"
+import { BaseError } from "../model/Error"
 
 export class UserController {
     constructor(
@@ -7,14 +9,48 @@ export class UserController {
     ) { }
 
 
-    public get = async (req: Request, res: Response) => {
+    public obter = async (req: Request, res: Response) => {
         try {
-            const output = await this.userBusiness.get()
-            res.status(200).send(output)
+            const response = await this.userBusiness.obter()
+            res.status(200).send(response)
         } catch (error) {
             console.log(error)
-        }
 
+            if (req.statusCode === 200) {
+                res.status(500)
+            }
+
+            if (error instanceof Error) {
+                res.send(error.message)
+            } else {
+                res.send("Erro inesperado")
+            }
+        }
     }
+
+    public signup = async (req: Request, res: Response) => {
+
+        try {
+            const request: SignupRequestDTO = {
+                name: req.body.name,
+                email: req.body.email,
+                password: req.body.password
+            }
+
+            const response: SignupResponseDTO = await this.userBusiness.signup(request)
+
+            res.status(201).send(response)
+        } catch (error) {
+            console.log(error)
+
+    
+            if (error instanceof BaseError) {
+                res.status(error.statusCode).send(error.message)
+            } else {
+                res.status(500).send("Erro inesperado")
+            }
+        }
+    }
+
 
 }
