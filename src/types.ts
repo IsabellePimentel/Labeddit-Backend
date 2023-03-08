@@ -10,3 +10,18 @@ export interface UserModel {
     role: USER_ROLES,
     createdAt: string
 }
+
+export interface UserDB {
+    id: string,
+    name: string,
+    email: string,
+    password: string,
+    role: USER_ROLES,
+    created_at: string
+}
+
+export interface TokenPayload {
+    id: string,
+    name: string,
+    role: USER_ROLES
+}
