@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { UserBusiness } from "../business/UserBusiness"
-import { SignupRequestDTO, SignupResponseDTO } from "../dto/UserDTO"
+import { LoginRequestDTO, SignupRequestDTO, SignupResponseDTO } from "../dto/UserDTO"
 import { BaseError } from "../model/Error"
 
 export class UserController {
@@ -44,6 +44,27 @@ export class UserController {
             console.log(error)
 
     
+            if (error instanceof BaseError) {
+                res.status(error.statusCode).send(error.message)
+            } else {
+                res.status(500).send("Erro inesperado")
+            }
+        }
+    }
+
+
+    public login = async (req: Request, res: Response) => {
+        try {
+            const request: LoginRequestDTO = {
+                email: req.body.email,
+                password: req.body.password
+            }
+
+            const response = await this.userBusiness.login(request)
+
+            res.status(200).send(response)
+
+        } catch (error) {
             if (error instanceof BaseError) {
                 res.status(error.statusCode).send(error.message)
             } else {

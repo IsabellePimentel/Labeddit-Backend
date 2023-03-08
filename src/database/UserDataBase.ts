@@ -16,4 +16,22 @@ export class UserDatabase extends BaseDatabase{
         await BaseDatabase.connection(UserDatabase.TABLE_USERS).insert(userDB)
     }
 
+    public async obterPorEmail(email: string): Promise <UserDB | null>{
+        const  usuario : UserDB[] = await BaseDatabase
+        .connection(UserDatabase.TABLE_USERS)
+        .select()
+        .where({email: email})
+
+        if(usuario) {
+            return usuario[0]
+        }else {
+            return null
+        }
+        
+    }
+
+
+
+    
+
 }

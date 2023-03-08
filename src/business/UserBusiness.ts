@@ -1,5 +1,5 @@
 import { UserDatabase } from "../database/UserDataBase";
-import { GetUsersDTO, SignupRequestDTO, SignupResponseDTO } from "../dto/UserDTO";
+import { GetUsersDTO, LoginRequestDTO, LoginResponseDTO, SignupRequestDTO, SignupResponseDTO } from "../dto/UserDTO";
 import { BadRequestError } from "../model/BadRequestError";
 import {  User } from "../model/User";
 import { IdGenerator } from "../service/IdGenerator";
@@ -12,6 +12,54 @@ export class UserBusiness {
     constructor(  private userDatabase: UserDatabase,
         private idGenerator: IdGenerator,
         private tokenManager: TokenManager ) { }
+
+    public login = async (request: LoginRequestDTO): Promise<LoginResponseDTO> => {
+        const { email, password } = request
+
+        if(email === undefined || email === null || email === "") {
+            throw new BadRequestError("Email é obrigatório")
+        }
+
+        if(password === undefined || password === null || password === "") {
+            throw new BadRequestError("Password é obrigatório")
+        }
+
+        const userDB = await this.userDatabase.obterPorEmail(email)
+
+        if (!userDB) {
+            throw new BadRequestError("usuário não encontrado")
+        }
+
+        const user = new User(
+            userDB.id,
+            userDB.name,
+            userDB.email,
+            userDB.password,
+            userDB.role,
+            userDB.created_at
+        )
+
+        const result = bcrypt.compareSync(password, userDB.password);
+
+        if (!result) {
+            throw new BadRequestError("password incorreto")
+        }
+
+        const tokenPayload: TokenPayload = {
+            id: user.getId(),
+            name: user.getName(),
+            role: user.getRole()
+        }
+
+        const token = this.tokenManager.createToken(tokenPayload)
+
+        const output: LoginResponseDTO = {
+            token
+        }
+
+        return output
+    }
+        
 
     public obter = async (): Promise<GetUsersDTO> => {
 

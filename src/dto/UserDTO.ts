@@ -12,3 +12,12 @@ export interface SignupRequestDTO {
 export interface SignupResponseDTO {
     token: string
 }
+
+
+export interface LoginRequestDTO {
+    email: string,
+    password: string
+}
+export interface LoginResponseDTO {
+    token: string
+}
