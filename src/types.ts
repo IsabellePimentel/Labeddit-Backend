@@ -25,3 +25,27 @@ export interface TokenPayload {
     name: string,
     role: USER_ROLES
 }
+
+export interface PostModel{
+    id: string,
+    content: string,
+    likes: number,
+    dislikes: number,
+    createdAt: string,
+    updatedAt: string,
+    creator:{
+        creatorId: string,
+        creatorName: string
+    }
+}
+
+export interface PostDB {
+    id: string,
+    creator_id: string,
+    content: string,
+    likes: number,
+    dislikes: number,
+    created_at: string,
+    updated_at: string,
+    creator_name: string
+}
