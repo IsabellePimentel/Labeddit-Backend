@@ -10,3 +10,10 @@ export interface CreatePostRequestDTO {
     token: string,
     content: string
 }
+
+
+export interface EditPostRequestDTO {
+    id:string,
+    content:string,
+    token:string
+}
