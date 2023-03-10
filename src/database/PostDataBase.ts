@@ -1,10 +1,11 @@
+import { LikeDislikePostDB } from "../dto/PostDTO";
 import { PostDB } from "../types";
 import { BaseDatabase } from "./BaseDataBase";
 
 export class PostDatabase extends BaseDatabase {
 
     public static TABLE_POSTS = "posts"
-
+    public static TABLE_LIKES_DISLIKES = "likes_dislikes"
 
     public obter = async (): Promise <PostDB[]> => {
         const result: PostDB[] = await BaseDatabase
@@ -52,6 +53,23 @@ export class PostDatabase extends BaseDatabase {
             .del()
             .where({ id })
     }
+
+
+    public obterLike = async (likeDislike: LikeDislikePostDB): Promise <number | null> =>{
+        const [likeDislikeDB]: LikeDislikePostDB[] = await BaseDatabase
+        .connection(PostDatabase.TABLE_LIKES_DISLIKES)
+        .select()
+        .where({
+            user_id: likeDislike.user_id,
+            post_id: likeDislike.post_id
+        })
+
+        if(likeDislikeDB){
+            return likeDislikeDB.like
+        }else{
+            return null
+        }
+    }  
 
 
 }
