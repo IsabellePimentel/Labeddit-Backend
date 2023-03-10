@@ -25,4 +25,8 @@ export class PostDatabase extends BaseDatabase {
         return result
     }
 
+    public async inserir(post: PostDB): Promise<void> {
+        await BaseDatabase.connection(PostDatabase.TABLE_POSTS).insert(post)
+    }
+
 }

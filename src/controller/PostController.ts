@@ -11,7 +11,7 @@ export class PostController {
     ) { }
 
 
-    public getPosts = async (req: Request, res: Response) => {
+    public obter = async (req: Request, res: Response) => {
         try {
 
             if (req.headers.authorization === undefined) {
@@ -36,5 +36,30 @@ export class PostController {
         }
     }
 
-   
+    public criar = async (req: Request, res: Response) => {
+        try {
+
+            if (req.headers.authorization === undefined) {
+                throw new BadRequestError("Token invalido ou expirado")
+            }
+            
+            const request = {
+                content: req.body.content,
+                token: req.headers.authorization
+            }
+
+            await this.postBusiness.criar(request)
+
+            res.status(201).end()
+
+        } catch (error) {
+            console.log(error)
+            if (error instanceof BaseError) {
+                res.status(error.statusCode).send(error.message)
+            } else {
+                res.status(500).send("Erro inesperado")
+            }
+        }
+    }
+    
 }
