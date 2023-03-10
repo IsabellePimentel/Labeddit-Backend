@@ -5,3 +5,8 @@ export interface GetPostRequestDTO {
 }
 
 export type GetPostResponseDTO = PostModel[]
+
+export interface CreatePostRequestDTO {
+    token: string,
+    content: string
+}

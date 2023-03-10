@@ -79,7 +79,7 @@ export class UserBusiness {
 
         const output: GetUsersDTO = users
 
-        return users
+        return output
     }
 
     public signup = async (request: SignupRequestDTO): Promise<SignupResponseDTO> => {
