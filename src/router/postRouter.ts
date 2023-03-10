@@ -20,3 +20,4 @@ const postController = new PostController(
 postRouter.get("/", postController.obter)
 postRouter.post("/", postController.criar)
 postRouter.put("/:id", postController.editar)
+postRouter.delete("/:id", postController.deletar)

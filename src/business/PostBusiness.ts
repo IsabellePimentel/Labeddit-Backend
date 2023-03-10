@@ -1,5 +1,5 @@
 import { PostDatabase } from "../database/PostDataBase"
-import { GetPostRequestDTO, GetPostResponseDTO, CreatePostRequestDTO, EditPostRequestDTO } from "../dto/PostDTO"
+import { GetPostRequestDTO, GetPostResponseDTO, CreatePostRequestDTO, EditPostRequestDTO, DeletePostRequestDTO } from "../dto/PostDTO"
 import { BadRequestError } from "../model/BadRequestError"
 import { TokenManager } from "../service/TokenManager"
 import { PostDB } from "../types"
@@ -83,6 +83,29 @@ export class PostBusiness {
         const post = newPost.toDBModel()
 
         await this.postDatabase.inserir(post)
+    }
+
+    public deletar = async (request: DeletePostRequestDTO): Promise<void> => {
+
+        const { id, token } = request
+
+        let t = token.substring(7, token.length)
+
+        const payload = this.tokenManager.getPayload(t)
+
+        if (payload === null) {
+            throw new BadRequestError("'token'inválido")
+        }
+
+        const post = await this.postDatabase.obterPorId(id)
+
+        if (!post) {
+
+            throw new BadRequestError("Id não encontrado")
+        }
+
+        await this.postDatabase.deletar(id)
+
     }
 
     public editar = async (request: EditPostRequestDTO): Promise<void> => {

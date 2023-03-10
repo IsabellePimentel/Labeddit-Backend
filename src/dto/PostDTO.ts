@@ -17,3 +17,10 @@ export interface EditPostRequestDTO {
     content:string,
     token:string
 }
+
+export interface DeletePostRequestDTO {
+    token: string,
+    id: string
+}
+
+

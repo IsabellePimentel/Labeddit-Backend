@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { PostBusiness } from "../business/PostBusiness"
-import { EditPostRequestDTO, GetPostRequestDTO } from "../dto/PostDTO"
+import { DeletePostRequestDTO, EditPostRequestDTO, GetPostRequestDTO } from "../dto/PostDTO"
 import { BadRequestError } from "../model/BadRequestError"
 import { BaseError } from "../model/Error"
 
@@ -42,7 +42,7 @@ export class PostController {
             if (req.headers.authorization === undefined) {
                 throw new BadRequestError("Token invalido ou expirado")
             }
-            
+
             const request: EditPostRequestDTO = {
                 id: req.params.id,
                 content: req.body.content,
@@ -78,6 +78,32 @@ export class PostController {
             await this.postBusiness.criar(request)
 
             res.status(201).end()
+
+        } catch (error) {
+            console.log(error)
+            if (error instanceof BaseError) {
+                res.status(error.statusCode).send(error.message)
+            } else {
+                res.status(500).send("Erro inesperado")
+            }
+        }
+    }
+
+
+    public deletar = async (req: Request, res: Response) => {
+        try {
+            if (req.headers.authorization === undefined) {
+                throw new BadRequestError("Token invalido ou expirado")
+            }
+            
+            const request: DeletePostRequestDTO = {
+                id: req.params.id,
+                token: req.headers.authorization
+            }
+
+            await this.postBusiness.deletar(request)
+
+            res.status(200).end()
 
         } catch (error) {
             console.log(error)
