@@ -10,5 +10,6 @@ export type GetCommentResponseDTO = CommentModel[]
 
 export interface CreateCommentRequestDTO {
     token: string,
-    content: string
+    content: string,
+    id: string
 }

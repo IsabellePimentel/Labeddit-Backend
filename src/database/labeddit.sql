@@ -26,7 +26,7 @@ CREATE TABLE posts(
 
 CREATE TABLE comments(
     id PRIMARY KEY UNIQUE NOT NULL,
-    post_id UNIQUE NOT NULL,
+    post_id NOT NULL,
     user_id NOt NULL,
     content TEXT NOT NULL,
     likes INTEGER DEFAULT(0) NOT NULL,
@@ -95,3 +95,6 @@ VALUES
 INSERT INTO likes_dislikes_comments (user_id, comment_id, like)
 VALUES
     ("u002", "c001", 1);
+
+
+   select * from comments;

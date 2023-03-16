@@ -57,4 +57,40 @@ export class CommentBusiness {
 
 
 
+    public criar = async (request: CreateCommentRequestDTO): Promise<void> => {
+
+        const { content, token, id } = request
+
+        let t = token.substring(7, token.length)
+
+        const payload = this.tokenManager.getPayload(t)
+
+        if (payload === null) {
+            throw new BadRequestError("'token'inválido")
+        }
+
+        const idComment = this.idGenerator.generate()
+
+        const creatorId = payload.id
+        const creatorName = payload.name
+
+        const newComment = new Comment(
+            idComment,
+            id,
+            content,
+            0, // likes
+            0, // dislikes
+            new Date().toISOString(),
+            new Date().toISOString(),
+            creatorId,
+            creatorName
+        )
+
+        const comment = newComment.toDBModel()
+
+        await this.commentDatabase.inserir(comment)
+    }
+
+
+
 }

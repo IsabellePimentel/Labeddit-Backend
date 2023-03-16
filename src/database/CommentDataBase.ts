@@ -1,4 +1,4 @@
-import { CommentDB } from "../types";
+import { CommentDB, CommentInsertUpdateDB } from "../types";
 import { BaseDatabase } from "./BaseDataBase";
 
 export class CommentDatabase extends BaseDatabase {
@@ -25,9 +25,14 @@ export class CommentDatabase extends BaseDatabase {
             .join("users", "comments.user_id", "=", "users.id")
             .select()
             .where({
-                "comments.post_id":postId
+                "comments.post_id": postId
             })
         return result
+    }
+
+
+    public async inserir(comment: CommentInsertUpdateDB): Promise<void> {
+        await BaseDatabase.connection(CommentDatabase.TABLE_COMMENTS).insert(comment)
     }
 
 }
