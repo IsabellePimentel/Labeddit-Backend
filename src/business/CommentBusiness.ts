@@ -1,5 +1,5 @@
 import { CommentDatabase } from "../database/CommentDataBase";
-import { CreateCommentRequestDTO, GetCommentRequestDTO, GetCommentResponseDTO } from "../dto/CommentDTO";
+import { CreateCommentRequestDTO, EditCommentRequestDTO, GetCommentRequestDTO, GetCommentResponseDTO } from "../dto/CommentDTO";
 import { BadRequestError } from "../model/BadRequestError";
 import { Comment } from "../model/Comment";
 import { IdGenerator } from "../service/IdGenerator";
@@ -92,5 +92,44 @@ export class CommentBusiness {
     }
 
 
+    public editar = async (request: EditCommentRequestDTO): Promise<void> => {
+
+        const { content, token, id_comment } = request
+
+        let t = token.substring(7, token.length)
+
+        const payload = this.tokenManager.getPayload(t)
+
+        if (payload === null) {
+            throw new BadRequestError("'token'inválido")
+        }
+
+        const commentDB = await this.commentDatabase.obterPorId(id_comment)
+
+        if (!commentDB) {
+            throw new BadRequestError("Post não encontrado")
+        }
+
+        const creatorName = payload.name
+
+        const newComment = new Comment(
+            commentDB.id,
+            commentDB.post_id,
+            commentDB.content,
+            commentDB.likes,
+            commentDB.dislikes,
+            commentDB.created_at,
+            commentDB.updated_at,
+            commentDB.user_id,
+            creatorName
+        )
+
+        newComment.setContent(content)
+        newComment.setUpdatedAt(new Date().toISOString())
+
+        const comment = newComment.toDBModel()
+
+        await this.commentDatabase.atualizar(id_comment, comment)
+    }
 
 }
