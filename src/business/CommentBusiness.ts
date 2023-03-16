@@ -1,5 +1,5 @@
 import { CommentDatabase } from "../database/CommentDataBase";
-import { CreateCommentRequestDTO, EditCommentRequestDTO, GetCommentRequestDTO, GetCommentResponseDTO } from "../dto/CommentDTO";
+import { CreateCommentRequestDTO, DeleteCommentRequestDTO, EditCommentRequestDTO, GetCommentRequestDTO, GetCommentResponseDTO } from "../dto/CommentDTO";
 import { BadRequestError } from "../model/BadRequestError";
 import { Comment } from "../model/Comment";
 import { IdGenerator } from "../service/IdGenerator";
@@ -130,6 +130,30 @@ export class CommentBusiness {
         const comment = newComment.toDBModel()
 
         await this.commentDatabase.atualizar(id_comment, comment)
+    }
+
+
+    public deletar = async (request: DeleteCommentRequestDTO): Promise<void> => {
+
+        const { id_comment, token } = request
+
+        let t = token.substring(7, token.length)
+
+        const payload = this.tokenManager.getPayload(t)
+
+        if (payload === null) {
+            throw new BadRequestError("'token'inválido")
+        }
+
+        const comment = await this.commentDatabase.obterPorId(id_comment)
+
+        if (!comment) {
+
+            throw new BadRequestError("Id não encontrado")
+        }
+
+        await this.commentDatabase.deletar(id_comment)
+
     }
 
 }

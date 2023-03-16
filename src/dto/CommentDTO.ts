@@ -20,3 +20,10 @@ export interface EditCommentRequestDTO {
     token:string,
     id_comment: string
 }
+
+
+export interface DeleteCommentRequestDTO {
+    token: string,
+    id: string,
+    id_comment: string
+}
