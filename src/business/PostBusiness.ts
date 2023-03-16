@@ -210,7 +210,11 @@ export class PostBusiness {
             }
         } else {
             await this.postDatabase.inserirLikeDislike(likeDislikePostDB)
-            like ? post.addLike() : post.addDislike()
+            if(like) {
+                post.setLikes( post.getLikes() + 1) 
+            }else{
+                post.setDislikes( post.getDislikes() + 1)
+            } 
         }
 
         const updatePostDB = post.toDBModel()
