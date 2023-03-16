@@ -13,3 +13,10 @@ export interface CreateCommentRequestDTO {
     content: string,
     id: string
 }
+
+export interface EditCommentRequestDTO {
+    id:string,
+    content:string,
+    token:string,
+    id_comment: string
+}
