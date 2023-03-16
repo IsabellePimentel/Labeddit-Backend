@@ -18,7 +18,8 @@ export class CommentController {
             }
 
             const request: GetCommentRequestDTO = {
-                token: req.headers.authorization
+                token: req.headers.authorization,
+                post_id: req.params.id
             }
 
             const response = await this.commentBusiness.getComments(request)

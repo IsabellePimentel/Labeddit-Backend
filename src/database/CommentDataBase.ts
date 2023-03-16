@@ -7,7 +7,7 @@ export class CommentDatabase extends BaseDatabase {
     public static TABLE_LIKES_DISLIKES = "likes_dislikes_comments"
 
 
-    public obter = async (): Promise <CommentDB[]> => {
+    public obter = async (postId: string): Promise <CommentDB[]> => {
         const result: CommentDB[] = await BaseDatabase
             .connection(CommentDatabase.TABLE_COMMENTS)
             .select(
@@ -23,7 +23,10 @@ export class CommentDatabase extends BaseDatabase {
 
             )
             .join("users", "comments.user_id", "=", "users.id")
-
+            .select()
+            .where({
+                "comments.post_id":postId
+            })
         return result
     }
 
