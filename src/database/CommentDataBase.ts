@@ -1,4 +1,4 @@
-import { CommentDB } from "../types";
+import { CommentDB, CommentInsertUpdateDB } from "../types";
 import { BaseDatabase } from "./BaseDataBase";
 
 export class CommentDatabase extends BaseDatabase {
@@ -7,7 +7,7 @@ export class CommentDatabase extends BaseDatabase {
     public static TABLE_LIKES_DISLIKES = "likes_dislikes_comments"
 
 
-    public obter = async (): Promise <CommentDB[]> => {
+    public obter = async (postId: string): Promise <CommentDB[]> => {
         const result: CommentDB[] = await BaseDatabase
             .connection(CommentDatabase.TABLE_COMMENTS)
             .select(
@@ -23,8 +23,16 @@ export class CommentDatabase extends BaseDatabase {
 
             )
             .join("users", "comments.user_id", "=", "users.id")
-
+            .select()
+            .where({
+                "comments.post_id": postId
+            })
         return result
+    }
+
+
+    public async inserir(comment: CommentInsertUpdateDB): Promise<void> {
+        await BaseDatabase.connection(CommentDatabase.TABLE_COMMENTS).insert(comment)
     }
 
 }

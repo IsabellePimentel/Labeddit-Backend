@@ -74,7 +74,7 @@ export interface CommentModel{
     }
 }
 
-export interface CommentInsertDB {
+export interface CommentInsertUpdateDB {
     id: string,
     post_id: string,
     user_id: string,

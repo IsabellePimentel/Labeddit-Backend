@@ -18,7 +18,8 @@ export class CommentController {
             }
 
             const request: GetCommentRequestDTO = {
-                token: req.headers.authorization
+                token: req.headers.authorization,
+                post_id: req.params.id
             }
 
             const response = await this.commentBusiness.getComments(request)
@@ -34,5 +35,35 @@ export class CommentController {
             }
         }
     }
+
+
+
+    public criar = async (req: Request, res: Response) => {
+        try {
+
+            if (req.headers.authorization === undefined) {
+                throw new BadRequestError("Token invalido ou expirado")
+            }
+
+            const request = {
+                content: req.body.content,
+                token: req.headers.authorization,
+                id: req.params.id
+            }
+
+            await this.commentBusiness.criar(request)
+
+            res.status(201).end()
+
+        } catch (error) {
+            console.log(error)
+            if (error instanceof BaseError) {
+                res.status(error.statusCode).send(error.message)
+            } else {
+                res.status(500).send("Erro inesperado")
+            }
+        }
+    }
+
     
 }

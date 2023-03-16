@@ -1,5 +1,5 @@
 import { CommentDatabase } from "../database/CommentDataBase";
-import { GetCommentRequestDTO, GetCommentResponseDTO } from "../dto/CommentDTO";
+import { CreateCommentRequestDTO, GetCommentRequestDTO, GetCommentResponseDTO } from "../dto/CommentDTO";
 import { BadRequestError } from "../model/BadRequestError";
 import { Comment } from "../model/Comment";
 import { IdGenerator } from "../service/IdGenerator";
@@ -18,7 +18,7 @@ export class CommentBusiness {
 
     public getComments = async (request: GetCommentRequestDTO): Promise<GetCommentResponseDTO> => {
 
-        const { token } = request
+        const { token, post_id } = request
 
         let t = token.substring(7, token.length)
 
@@ -28,7 +28,7 @@ export class CommentBusiness {
             throw new BadRequestError("'token'inválido")
         }
 
-        const commentDB: CommentDB[] = await this.commentDatabase.obter()
+        const commentDB: CommentDB[] = await this.commentDatabase.obter(post_id)
 
 
 
@@ -54,5 +54,43 @@ export class CommentBusiness {
         const output: GetCommentResponseDTO = comments
         return output
     }
+
+
+
+    public criar = async (request: CreateCommentRequestDTO): Promise<void> => {
+
+        const { content, token, id } = request
+
+        let t = token.substring(7, token.length)
+
+        const payload = this.tokenManager.getPayload(t)
+
+        if (payload === null) {
+            throw new BadRequestError("'token'inválido")
+        }
+
+        const idComment = this.idGenerator.generate()
+
+        const creatorId = payload.id
+        const creatorName = payload.name
+
+        const newComment = new Comment(
+            idComment,
+            id,
+            content,
+            0, // likes
+            0, // dislikes
+            new Date().toISOString(),
+            new Date().toISOString(),
+            creatorId,
+            creatorName
+        )
+
+        const comment = newComment.toDBModel()
+
+        await this.commentDatabase.inserir(comment)
+    }
+
+
 
 }

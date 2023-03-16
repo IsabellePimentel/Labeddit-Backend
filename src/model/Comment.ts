@@ -1,4 +1,4 @@
-import { CommentModel, CommentDB, CommentInsertDB } from "../types"
+import { CommentModel, CommentDB, CommentInsertUpdateDB } from "../types"
 
  export class Comment{
          constructor(
@@ -97,7 +97,7 @@ import { CommentModel, CommentDB, CommentInsertDB } from "../types"
          this.creatorName = value
      }
 
-     public toDBModel(): CommentInsertDB{
+     public toDBModel(): CommentInsertUpdateDB{
          return{
              id: this.id,
              post_id: this.postId,
