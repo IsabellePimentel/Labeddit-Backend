@@ -116,7 +116,7 @@ export class PostController {
     }
  
     
-    public like = async (req: Request, res: Response) => {
+    public likedislike = async (req: Request, res: Response) => {
         try {
 
             if (req.headers.authorization === undefined) {
@@ -128,6 +128,8 @@ export class PostController {
                 token: req.headers.authorization,
                 like: req.body.like
             }
+
+            console.log(input)
 
             await this.postBusiness.like(input)
 

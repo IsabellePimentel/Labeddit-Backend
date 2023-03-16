@@ -1,11 +1,11 @@
 import { LikeDislikePostDB } from "../dto/PostDTO";
-import { PostDB } from "../types";
+import { PostDB, PostInsertUpdateDB } from "../types";
 import { BaseDatabase } from "./BaseDataBase";
 
 export class PostDatabase extends BaseDatabase {
 
     public static TABLE_POSTS = "posts"
-    public static TABLE_LIKES_DISLIKES = "likes_dislikes"
+    public static TABLE_LIKES_DISLIKES = "likes_dislikes_posts"
 
     public obter = async (): Promise <PostDB[]> => {
         const result: PostDB[] = await BaseDatabase
@@ -26,7 +26,7 @@ export class PostDatabase extends BaseDatabase {
         return result
     }
 
-    public async inserir(post: PostDB): Promise<void> {
+    public async inserir(post: PostInsertUpdateDB): Promise<void> {
         await BaseDatabase.connection(PostDatabase.TABLE_POSTS).insert(post)
     }
 
@@ -40,7 +40,7 @@ export class PostDatabase extends BaseDatabase {
     }
 
 
-    public async atualizar(id: string, newPostDB: PostDB): Promise<void> {
+    public async atualizar(id: string, newPostDB: PostInsertUpdateDB): Promise<void> {
         await BaseDatabase
             .connection(PostDatabase.TABLE_POSTS)
             .update(newPostDB)
