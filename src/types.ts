@@ -59,3 +59,40 @@ export interface PostInsertUpdateDB {
     created_at: string,
     updated_at: string
 }
+
+export interface CommentModel{
+    id: string,
+    postId: string,
+    content: string,
+    likes: number,
+    dislikes: number,
+    createdAt: string,
+    updatedAt: string,
+    creator: {
+        userId: string,
+        creatorName: string,
+    }
+}
+
+export interface CommentInsertDB {
+    id: string,
+    post_id: string,
+    user_id: string,
+    content: string,
+    likes: number,
+    dislikes: number,
+    created_at: string,
+    updated_at: string
+}
+
+export interface CommentDB {
+    id:string,
+    user_id: string,
+    content: string,
+    post_id: string,
+    likes: number,
+    dislikes: number,
+    created_at: string,
+    updated_at:string,
+    creator_name: string
+}
