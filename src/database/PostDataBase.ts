@@ -72,4 +72,30 @@ export class PostDatabase extends BaseDatabase {
     }  
 
 
+    public removerLikeDislike = async (like: LikeDislikePostDB): Promise <void> =>{
+        await BaseDatabase
+        .connection(PostDatabase.TABLE_LIKES_DISLIKES)
+        .delete()
+        .where({
+            user_id: like.user_id,
+            post_id: like.post_id
+        })
+    }
+    public atualizarLikeDislike = async (like: LikeDislikePostDB): Promise <void> =>{
+        await BaseDatabase
+        .connection(PostDatabase.TABLE_LIKES_DISLIKES)
+        .update(like)
+        .where({
+            user_id: like.user_id,
+            post_id: like.post_id
+        })
+    }
+
+    public inserirLikeDislike = async (like: LikeDislikePostDB): Promise <void> =>{
+        await BaseDatabase
+        .connection(PostDatabase.TABLE_LIKES_DISLIKES)
+        .insert(like)
+    }
+
+
 }

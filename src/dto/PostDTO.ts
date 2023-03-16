@@ -24,3 +24,14 @@ export interface DeletePostRequestDTO {
 }
 
 
+export interface LikeRequestDTO {
+    id: string,
+    token: string,
+    like: number
+}
+
+export interface LikeDislikePostDB{
+    post_id: string,
+    user_id: string,
+    like: number
+}
