@@ -1,4 +1,4 @@
-import { PostModel, PostDB } from "../types"
+import { PostModel, PostDB, PostInsertUpdateDB } from "../types"
 
 export class Post{
     constructor(
@@ -73,7 +73,7 @@ export class Post{
         this.creatorName = value
     }
 
-    public toDBModel(): PostDB{
+    public toDBModel(): PostInsertUpdateDB{
         return{
             id: this.id,
             creator_id: this.creatorId,
@@ -81,9 +81,7 @@ export class Post{
             likes: this.likes,
             dislikes: this.dislikes,
             created_at: this.createdAt,
-            updated_at: this.updatedAt,
-            creator_name: this.creatorName
-        }
+            updated_at: this.updatedAt        }
     }
 
     public toBusinessModel(): PostModel{
