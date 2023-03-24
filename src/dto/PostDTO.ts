@@ -4,6 +4,11 @@ export interface GetPostRequestDTO {
     token: string
 }
 
+export interface GetPostPorIdRequestDTO {
+token: string,
+id: string
+}
+
 export type GetPostResponseDTO = PostModel[]
 
 export interface CreatePostRequestDTO {

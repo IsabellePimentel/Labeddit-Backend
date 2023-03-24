@@ -1,8 +1,8 @@
 import { PostDatabase } from "../database/PostDataBase"
-import { GetPostRequestDTO, GetPostResponseDTO, CreatePostRequestDTO, EditPostRequestDTO, DeletePostRequestDTO, LikeRequestDTO, LikeDislikePostDB } from "../dto/PostDTO"
+import { GetPostRequestDTO, GetPostResponseDTO, CreatePostRequestDTO, EditPostRequestDTO, DeletePostRequestDTO, LikeRequestDTO, LikeDislikePostDB, GetPostPorIdRequestDTO } from "../dto/PostDTO"
 import { BadRequestError } from "../model/BadRequestError"
 import { TokenManager } from "../service/TokenManager"
-import { PostDB } from "../types"
+import { PostDB, PostModel } from "../types"
 import { Post } from "../model/Post"
 import { IdGenerator } from "../service/IdGenerator"
 
@@ -12,6 +12,42 @@ export class PostBusiness {
         private postDatabase: PostDatabase,
         private idGenerator: IdGenerator
     ) { }
+
+    public getPostPorId = async (request: GetPostPorIdRequestDTO): Promise<PostModel> => {
+
+        const { id, token } = request
+
+        let t = token.substring(7, token.length)
+
+        const payload = this.tokenManager.getPayload(t)
+
+        if (payload === null) {
+            throw new BadRequestError("'token'inválido")
+        }
+
+        const p = await this.postDatabase.obterPorId(id)
+
+        if (!p) {
+
+            throw new BadRequestError("Id não encontrado")
+        }
+
+        const post = new Post(
+            p.id,
+            p.content,
+            p.likes,
+            p.dislikes,
+            p.created_at,
+            p.updated_at,
+            p.creator_id,
+            p.creator_name
+
+        )
+
+        return post.toBusinessModel()
+
+
+    }
 
 
     public getPosts = async (request: GetPostRequestDTO): Promise<GetPostResponseDTO> => {

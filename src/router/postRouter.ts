@@ -29,6 +29,7 @@ const commentController = new CommentController(
 
 
 postRouter.get("/", postController.obter)
+postRouter.get("/:id", postController.obterPorId)
 postRouter.post("/", postController.criar)
 postRouter.put("/:id", postController.editar)
 postRouter.delete("/:id", postController.deletar)
